@@ -1,0 +1,78 @@
+function initialiseGL(canvas) {
+    try {
+        // Try to grab the standard context. If it fails, fallback to experimental
+        gl = canvas.getContext('webgl');
+        gl.viewport(0, 0, canvas.width, canvas.height);
+    }
+    catch (e) {
+    }
+
+    var drag=false;
+
+    var original_x, original_y;
+    
+    var mouseDown=function(e) {
+        drag=true;
+        original_x = e.pageX;
+        original_y = e.pageY;
+        e.preventDefault();
+
+    };
+
+    var mouseUp=function(e){
+        drag=false;
+    };
+
+    var mouseMove=function(e) {
+        if (!drag) return false;
+        if(e.which == 1) {
+            var gap_x = e.pageX - original_x;
+            var gap_y = e.pageY - original_y;
+            
+            yRot += gap_x*3/canvas.width;
+            xRot += gap_y*3/canvas.height;
+
+            original_x = e.pageX;
+            original_y = e.pageY;
+
+            e.preventDefault();
+        }
+        else if(e.which == 2) {
+
+            var gap_x = e.pageX - original_x;
+            var gap_y = e.pageY - original_y;
+
+            model_posx += -gap_x*3/canvas.width;
+            model_posy += gap_y*3/canvas.height;
+
+            original_x = e.pageX;
+            original_y = e.pageY;
+            e.preventDefault();
+        }
+    };
+
+    var mouseWheel=function(e){
+        e.preventDefault();
+        if(event.wheelDelta<0) {
+            if(fov_degree < 180)
+                fov_degree += 1;
+        }
+
+        else {
+            if(fov_degree > 1)
+                fov_degree -= 1;
+        }
+    }
+
+    canvas.addEventListener("mousedown", mouseDown, false);
+    canvas.addEventListener("mouseup", mouseUp, false);
+    canvas.addEventListener("mouseout", mouseUp, false);
+    canvas.addEventListener("mousemove", mouseMove, false);
+    canvas.addEventListener("wheel", mouseWheel, false);
+
+    if (!gl) {
+        alert("Unable to initialise WebGL. Your browser may not support it");
+        return false;
+    }
+    return true;
+}

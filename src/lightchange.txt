@@ -1,0 +1,12 @@
+light_posx = document.getElementById('light_posx').value;
+light_posy = document.getElementById('light_posy').value; 
+light_posz = document.getElementById('light_posz').value;
+
+light_r = document.getElementById('light_r').value;
+light_g = document.getElementById('light_g').value; 
+light_b = document.getElementById('light_b').value;
+
+// Set Light Position
+gl.uniform3f(gl.getUniformLocation(gl.programObject, "lightPos"), light_posx, light_posy, light_posz);
+// Set Light Color
+gl.uniform4f(gl.getUniformLocation(gl.programObject, "lightColor"), light_r, light_g, light_b, 1.0);
